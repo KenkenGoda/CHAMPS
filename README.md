@@ -1,5 +1,5 @@
 # CHAMPS
-- This is repository for Kaggle competition.
+- This is a repository for Kaggle competition.
 - This is composed of three directories as below.
 
 ## `database`
@@ -12,4 +12,4 @@
 
 ## `scripts`
 - This directory has script files.
-- These files are mainly used for experiments.
+- These files are mainly used for running experiments.
