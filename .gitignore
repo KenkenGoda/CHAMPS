@@ -130,6 +130,7 @@ dmypy.json
 .pyre/
 
 # Others
+.DS_Store
 .vscode/
 data/
 results/
