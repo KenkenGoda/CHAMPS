@@ -1,6 +1,6 @@
-from config import Config
-from load import RawData
-from preprocess import Preprocessor
+from .config import Config
+from .db import LocalFile
+from .preprocess import Preprocessor
 
 
 class DatasetCreator:
@@ -9,13 +9,55 @@ class DatasetCreator:
         self.preprocessor = Preprocessor()
 
     def run(self):
-        raw = RawData()
-        train, test = self.preprocessor(raw)
-        dataset = Dataset(train, test)
+        # load files
+        db = LocalFile(self.config)
+        train = db.get_train()
+        test = db.get_test()
+        submission = db.get_submission()
+        dipole_moments = db.get_dipole_moments()
+        magnetic_shielding_tensors = db.get_magnetic_shielding_tensors()
+        mulliken_charges = db.get_mulliken_charges()
+        potential_energy = db.get_potential_energy()
+        scalar_coupling_contributions = db.get_scalar_coupling_contributions()
+        structures = db.get_structures()
+
+        # preprocess data
+        train, test, structures = self.preprocessor(train, test, structures)
+
+        # create dataset
+        dataset = Dataset(
+            train,
+            test,
+            submission,
+            dipole_moments,
+            magnetic_shielding_tensors,
+            mulliken_charges,
+            potential_energy,
+            scalar_coupling_contributions,
+            structures,
+        )
         return dataset
 
 
 class Dataset:
-    def __init__(self, train, test):
+    def __init__(
+        self,
+        train,
+        test,
+        submission,
+        dipole_moments,
+        magnetic_shielding_tensors,
+        mulliken_charges,
+        potential_energy,
+        scalar_coupling_contributions,
+        structures,
+    ):
         self.train = train
         self.test = test
+        self.submission = submission
+        self.dipole_moments = dipole_moments
+        self.magnetic_shielding_tensors = magnetic_shielding_tensors
+        self.mulliken_charges = mulliken_charges
+        self.potential_energy = potential_energy
+        self.scalar_coupling_contributions = scalar_coupling_contributions
+        self.structures = structures
