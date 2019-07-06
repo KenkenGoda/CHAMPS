@@ -7,12 +7,5 @@ import optuna
 
 class LGBMRegressor(lightgbm.LGBMRegressor):
     def __init__(self, **kwargs):
-        """
-        Parameters
-        ----------
-        **kwargs :
-            parameters to sklearn.linear_model.LogisticRegression
-
-        """
         super().__init__(**kwargs)
 

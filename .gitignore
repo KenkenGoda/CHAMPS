@@ -131,7 +131,7 @@ dmypy.json
 
 # Others
 .DS_Store
-.vscode/
+scripts/.vscode/
 data/
 results/
 notebooks/scripts/

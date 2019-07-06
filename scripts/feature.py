@@ -5,26 +5,12 @@ import pandas as pd
 
 class FeatureFactory:
     def __call__(self, feature_names, **kwargs):
-        """特徴量インスタンスを生成する
-
-        Parameters
-        ----------
-        feature_name : str
-            特徴量名
-
-        Returns
-        -------
-        Feature
-            特徴量インスタンス
-
-        """
         if feature_names in globals():
             return globals()[feature_names](**kwargs)
         else:
             raise ValueError("No feature defined named with {}".format(feature_names))
 
     def feature_list(self):
-        """特徴量名リストを取得する"""
         lst = []
         for name in globals():
             obj = globals()[name]
@@ -38,8 +24,6 @@ class FeatureFactory:
 
 
 class Feature:
-    """特徴量クラス"""
-
     categories = None
     dummy = True
     default = 0
@@ -54,20 +38,6 @@ class Feature:
         return self.__class__.__name__
 
     def apply(self, dataset):
-        """特徴量を抽出する
-
-        Parameters
-        ----------
-        dataset : DataSet
-            データセット
-
-        Returns
-        -------
-        pandas.Series
-            indexはmemberId
-            nameはDataFrameになったときのカラム名
-
-        """
         values = self.extract(dataset)
 
         if self.categories:
@@ -82,19 +52,6 @@ class Feature:
         return values
 
     def convert_into_categories(self, X):
-        """カテゴリ情報を付与し、dummy=Trueの場合はダミー化する
-
-        Parameters
-        ----------
-        X : pandas.Series
-            入力データ
-
-        Returns
-        -------
-        pandas.Series or pandas.DataFrame
-            カテゴリ情報を付与した特徴量
-
-        """
         index = X.index
         X = pd.Categorical(X, categories=self.categories)
         if self.dummy:
@@ -104,13 +61,6 @@ class Feature:
         return X
 
     def get_columns(self):
-        """カテゴリ変数のカラム名のリストを取得
-
-        Returns
-        -------
-        list
-            カテゴリ情報を持ったカラム名のリスト
-        """
         if isinstance(self.categories, list) and self.dummy:
             columns = [f"{self}_{cat}" for cat in self.categories]
             if self.dummy_na:
