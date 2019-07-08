@@ -8,6 +8,14 @@ class Preprocessor:
         return self.run(train, test, structures)
 
     def run(self, train, test, structures):
+        structures = self.preprocess_structures(structures)
+        train = self.preprocess_train(train, structures)
+        test = self.preprocess_test(test, structures)
+        return train, test, structures
+
+    def preprocess_structures(self, structures):
+        structures = structures.copy()
+
         ATOMIC_RADIUS = {"H": 0.38, "C": 0.77, "N": 0.75, "O": 0.73, "F": 0.71}
         FUDGE_FACTOR = 0.05
         ATOMIC_RADIUS = {k: v + FUDGE_FACTOR for k, v in ATOMIC_RADIUS.items()}
@@ -89,4 +97,35 @@ class Preprocessor:
             "bond_lengths_std": bond_lengths_std,
         }
         bond_df = pd.DataFrame(bond_data)
-        structures = structures.copy().join(bond_df)
+        structures = structures.join(bond_df)
+        return structures
+
+    def preprocess_train(self, train, structures):
+        train = train.copy()
+        train = self._map_atom_info(train, structures, 0)
+        train = self._map_atom_info(train, structures, 1)
+        return train
+
+    def preprocess_test(self, test, structures):
+        test = test.copy()
+        test = self._map_atom_info(test, structures, 0)
+        test = self._map_atom_info(test, structures, 1)
+        return test
+
+    def _map_atom_info(self, df, structures, atom_idx):
+        df = pd.merge(
+            df,
+            structures,
+            how="left",
+            left_on=["molecule_name", f"atom_index_{atom_idx}"],
+            right_on=["molecule_name", "atom_index"],
+        )
+        df = df.rename(
+            columns={
+                "atom": f"atom_{atom_idx}",
+                "x": f"x_{atom_idx}",
+                "y": f"y_{atom_idx}",
+                "z": f"z_{atom_idx}",
+            }
+        )
+        return df
