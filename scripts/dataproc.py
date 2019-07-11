@@ -48,7 +48,7 @@ class DataProcessor:
         X_test = dataset.test.drop(
             columns=["id", "molecule_name", "atom_index_0", "atom_index_1"]
         )
-        if self.target_feature:
+        if self.target_name:
             y_train = dataset.train["scalar_coupling_constant"]
             return X_train, y_train, X_test
         else:

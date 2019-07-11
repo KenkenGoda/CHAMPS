@@ -1,13 +1,23 @@
 import pandas as pd
 
-from .dataproc import DataProcessor
+from .model import LGBMRegressor
+from .tune import ParameterTuning
 
 
 class ModelTrainer:
-    def __init__(self, config, **params):
+    def __init__(self, config):
         self.config = config
-        self.params = params
-        self.dataproc = DataProcessor()
 
-    def run(self, X, y):
-        pass
+    def run(self, X, y, tuning=False, n_trials=1):
+        pt = ParameterTuning()
+        if tuning:
+            params = pt.run(X, y, n_trials=n_trials)
+        else:
+            params = pt.get_best_params()
+            if params is None:
+                params = {}
+
+        self.model = LGBMRegressor(**params)
+
+        self.model.fit(X, y)
+        self.model.predict()
