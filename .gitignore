@@ -136,3 +136,4 @@ scripts/*
 data/
 notebooks/*
 !notebooks/*.ipynb
+results/
