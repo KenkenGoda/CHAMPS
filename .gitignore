@@ -134,6 +134,5 @@ dmypy.json
 scripts/*
 !scripts/*.py
 data/
-notebooks/*
-!notebooks/*.ipynb
+notebooks/
 results/
