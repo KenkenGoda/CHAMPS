@@ -1,12 +1,8 @@
 import numpy as np
 import pandas as pd
-from sklearn.preprocessing import LabelEncoder
 
 
 class Preprocessor:
-    def __call__(self, train, test, structures):
-        return self.run(train, test, structures)
-
     def run(self, train, test, structures):
         structures = self.preprocess_structures(structures)
         train = self.preprocess_train(train, structures)
@@ -104,13 +100,17 @@ class Preprocessor:
         train = train.copy()
         train = self._map_atom_info(train, structures, 0)
         train = self._map_atom_info(train, structures, 1)
-        return train
+        train = self._get_distance_between_atoms(train)
+        train["type_0"] = train["type"].apply(lambda x: x[0])
+        return train.set_index(["molecule_name", "atom_index_0", "atom_index_1"])
 
     def preprocess_test(self, test, structures):
         test = test.copy()
         test = self._map_atom_info(test, structures, 0)
         test = self._map_atom_info(test, structures, 1)
-        return test
+        test = self._get_distance_between_atoms(test)
+        test["type_0"] = test["type"].apply(lambda x: x[0])
+        return test.set_index(["molecule_name", "atom_index_0", "atom_index_1"])
 
     def _map_atom_info(self, df, structures, atom_idx):
         df = pd.merge(
@@ -128,4 +128,14 @@ class Preprocessor:
                 "z": f"z_{atom_idx}",
             }
         )
+        return df
+
+    def _get_distance_between_atoms(self, df):
+        df_p_0 = df[["x_0", "y_0", "z_0"]].values
+        df_p_1 = df[["x_1", "y_1", "z_1"]].values
+
+        df["dist"] = np.linalg.norm(df_p_0 - df_p_1, axis=1)
+        df["dist_x"] = (df["x_0"] - df["x_1"]) ** 2
+        df["dist_y"] = (df["y_0"] - df["y_1"]) ** 2
+        df["dist_z"] = (df["z_0"] - df["z_1"]) ** 2
         return df

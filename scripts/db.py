@@ -12,7 +12,7 @@ class LocalFile:
         return pd.read_csv(self.config.test_path)
 
     def get_submission(self):
-        return pd.read_csv(self.config.submission_path)
+        return pd.read_csv(self.config.sample_submission_path)
 
     def get_dipole_moments(self):
         return pd.read_csv(self.config.dipole_moments_path)

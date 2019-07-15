@@ -6,63 +6,45 @@ from .feature import FeatureFactory
 
 
 class DataProcessor:
-    def __init__(self, config, fc=None):
-        ff = FeatureFactory()
-        if config.feature_names == []:
-            self.feature = None
-        else:
-            self.features = [ff(name) for name in config.feature_names]
-        self.target_name = config.target_name
+    def __init__(self, config):
+        self.config = config
         self.pickle_dir = config.pickle_dir
-        self.fc = fc
+        self.feature_names = config.feature_names
+        self.target_name = config.target_name
 
-    def run(self, dataset, feature_exists=False):
-        # load X dataframe
-        if feature_exists:
-            X_train = pd.read_pickle(os.path.join(self.pickle_dir, "X_train.pkl"))
-            X_test = pd.read_pickle(os.path.join(self.pickle_dir, "X_test.pkl"))
+    def run(self, dataset):
+        # X
+        X_train = self._make_X(dataset.train, dataset)
+        X_test = self._make_X(dataset.test, dataset)
+
+        # y
+        if self.target_name == "scalar_coupling_constant":
+            y_train = dataset.train[["scalar_coupling_constant"]]
         else:
-            X_train = None
-            X_test = None
+            y_train = dataset.scalar_coupling_contributions[[self.target_name]]
+        y_train["type"] = dataset.train["type"]
 
-        X_train = self._make_X(dataset.train, dataset, X_train)
-        X_test = self._make_X(dataset.test, dataset, X_test)
+        return X_train, y_train, X_test
 
-        if self.fc is not None:
-            X_train = X_train.merge(
-                dataset.scalar_coupling_constant[
-                    ["molecule_name", "atom_index_0", "atom_index_1", "fc"]
-                ],
-                on=["molecule_name", "atom_index_0", "atom_index_1"],
-            )
+    def _make_X(self, df, dataset):
+        ff = FeatureFactory()
+        features = [ff(name) for name in self.feature_names]
 
-        X_train = dataset.train.drop(
-            columns=[
-                "id",
-                "molecule_name",
-                "scalar_coupling_constant",
-                "atom_index_0",
-                "atom_index_1",
-            ]
-        )
-        X_test = dataset.test.drop(
-            columns=["id", "molecule_name", "atom_index_0", "atom_index_1"]
-        )
-        if self.target_name:
-            y_train = dataset.train["scalar_coupling_constant"]
-            return X_train, y_train, X_test
-        else:
-            return X_train, X_test
-
-    def _make_X(self, df, dataset, X=None):
-        if X is None:
-            X = pd.DataFrame(index=df.index)
-
-        if self.features is not None:
-            for feature in self.features:
-                values = pd.DataFrame(feature.apply(dataset, df))
-                X_cols = values.columns.tolist()
-                X = X.join(values)
-                if feature.default is not None:
-                    X[X_cols] = X[X_cols].fillna(feature.default)
+        X = pd.DataFrame(index=df.index)
+        for feature in features:
+            name = feature.__class__.__name__
+            if os.path.isfile(os.path.join(self.pickle_dir, f"{name}.pkl")):
+                values = pd.read_pickle(os.path.join(self.pickle_dir, f"{name}.pkl"))
+            else:
+                values = pd.DataFrame(feature.run(dataset, df))
+                self._save_feature(values, name)
+            X = X.join(values)
         return X
+
+    def _save_feature(self, values, name):
+        os.makedirs(self.pickle_dir, exist_ok=True)
+        values.to_pickle(os.path.join(self.pickle_dir, f"{name}.pkl"))
+        print(f"save {name} class to pickle")
+
+    def load_feature(self, name):
+        return pd.read_pickle(os.path.join(self.pickle_dir, f"{name}.pkl"))

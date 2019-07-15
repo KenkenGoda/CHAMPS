@@ -7,7 +7,9 @@ class Config:
         self.data_dir = "../data"
         self.train_path = os.path.join(self.data_dir, "train.csv")
         self.test_path = os.path.join(self.data_dir, "test.csv")
-        self.submission_path = os.path.join(self.data_dir, "sample_submission.csv")
+        self.sample_submission_path = os.path.join(
+            self.data_dir, "sample_submission.csv"
+        )
         self.dipole_moments_path = os.path.join(self.data_dir, "dipole_moments.csv")
         self.magnetic_shielding_tensors_path = os.path.join(
             self.data_dir, "magnetic_shielding_tensors.csv"
@@ -19,7 +21,20 @@ class Config:
         )
         self.structures_path = os.path.join(self.data_dir, "structures.csv")
 
-        # pickle file path
+        # pickle directory path
         self.pickle_dir = os.path.join(self.data_dir, "pickle")
 
-        self.feature_names = []
+        # submission file path
+        self.submission_path = "../results/submission.csv"
+
+        self.feature_names = [
+            "MoleculeCount",
+            "MoleculeDistanceStatistics",
+            "Atom0Count",
+            "Atom1Count",
+        ]
+
+        self.target_name = ["fc"]
+
+        # random seed
+        self.seed = 42

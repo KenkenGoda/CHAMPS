@@ -10,7 +10,6 @@ from .preprocess import Preprocessor
 class DatasetCreator:
     def __init__(self):
         self.config = Config()
-        self.preprocessor = Preprocessor()
 
     def run(self):
         # load files
@@ -26,19 +25,22 @@ class DatasetCreator:
         structures = db.get_structures()
 
         # preprocess data
-        train, test, structures = self.preprocessor(train, test, structures)
+        preprocessor = Preprocessor()
+        train, test, structures = preprocessor.run(train, test, structures)
 
         # create dataset
         dataset = Dataset(
             train,
             test,
             submission,
-            dipole_moments,
-            magnetic_shielding_tensors,
-            mulliken_charges,
-            potential_energy,
-            scalar_coupling_contributions,
-            structures,
+            dipole_moments.set_index("molecule_name"),
+            magnetic_shielding_tensors.set_index("molecule_name"),
+            mulliken_charges.set_index("molecule_name"),
+            potential_energy.set_index("molecule_name"),
+            scalar_coupling_contributions.set_index(
+                ["molecule_name", "atom_index_0", "atom_index_1"]
+            ),
+            structures.set_index("molecule_name"),
         )
 
         # save dataset object to pickle
@@ -69,12 +71,12 @@ class Dataset:
         self.scalar_coupling_contributions = scalar_coupling_contributions
         self.structures = structures
 
-    def save(self, dir):
-        os.makedirs(dir, exist_ok=True)
-        pickle.dump(self, open(os.path.join(dir, "dataset.pkl"), "wb"))
+    def save(self, save_dir):
+        os.makedirs(save_dir, exist_ok=True)
+        pickle.dump(self, open(os.path.join(save_dir, "dataset.pkl"), "wb"))
         print("save the dataset pickle")
 
     @classmethod
-    def load(cls, dir):
+    def load(cls, save_dir):
         print("load the dataset pickle")
-        return pickle.load(open(os.path.join(dir, "dataset.pkl"), "rb"))
+        return pickle.load(open(os.path.join(save_dir, "dataset.pkl"), "rb"))

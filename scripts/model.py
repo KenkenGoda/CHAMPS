@@ -26,7 +26,7 @@ class LGBMRegressor(lightgbm.LGBMRegressor):
         n_jobs=-1,
         silent=True,
         importance_type="split",
-        **kwargs
+        **kwargs,
     ):
         params = {
             "boosting_type": boosting_type,
@@ -97,7 +97,7 @@ class LGBMRegressor(lightgbm.LGBMRegressor):
         num_iteration=None,
         pred_leaf=False,
         pred_contrib=False,
-        **kwargs
+        **kwargs,
     ):
         params = {
             "raw_score": raw_score,
@@ -107,8 +107,10 @@ class LGBMRegressor(lightgbm.LGBMRegressor):
         }
         return self.predict(X, **params, **kwargs)
 
-    def calculate_score(
-        self, y_true, y_pred, sample_weight=None, multioutput="uniform_average"
-    ):
-        params = {"sample_weight": sample_weight, "multioutput": multioutput}
-        return np.log(mean_absolute_error(y_true, y_pred, **params))
+    def calculate_score(self, y_valid, y_pred):
+        score = []
+        for scalar_coupling_type in y_valid["type"].unique():
+            idx = y_valid.query(f"type=='{scalar_coupling_type}'").index.values
+            y_true = y_valid.drop(columns="type").iloc[idx]
+            score.append(np.log(mean_absolute_error(y_true, y_pred[idx])))
+        return np.mean(score)

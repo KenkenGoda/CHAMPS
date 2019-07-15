@@ -18,6 +18,7 @@ class FeatureFactory:
                 FeatureFactory,
                 Feature,
                 BasicFeature,
+                AtomCountFeature,
             ]:
                 lst.append(obj.__name__)
         return lst
@@ -66,7 +67,7 @@ class Feature:
         else:
             return [str(self)]
 
-    def extract(self, dataset):
+    def extract(self, dataset, df):
         raise NotImplementedError
 
 
@@ -76,24 +77,14 @@ class BasicFeature(Feature):
 
 
 class MoleculeCount(Feature):
-    def extract(self, dataset, kind):
-        if kind == "train":
-            df = dataset.train
-        elif kind == "test":
-            df = dataset.test
-
+    def extract(self, dataset, df):
         values = df.groupby("molecule_name").agg({"id": "count"})
         values.name = "molecule_couples"
         return values
 
 
 class MoleculeDistanceStatistics(Feature):
-    def extract(self, dataset, kind):
-        if kind == "train":
-            df = dataset.train
-        elif kind == "test":
-            df = dataset.test
-
+    def extract(self, dataset, df):
         values = df.groupby("molecule_name").agg({"dist": ["mean", "min", "max"]})
         values.columns = [
             "molecule_dist_mean",
@@ -103,16 +94,11 @@ class MoleculeDistanceStatistics(Feature):
         return values
 
 
-class AtomCount(Feature):
+class AtomCountFeature(Feature):
 
     atom_idx = None
 
-    def extract(self, dataset, kind):
-        if kind == "train":
-            df = dataset.train
-        elif kind == "test":
-            df = dataset.test
-
+    def extract(self, dataset, df):
         values = df.groupby(["molecule_name", f"atom_index_{self.atom_idx}"]).agg(
             {"id": "count"}
         )
@@ -120,12 +106,12 @@ class AtomCount(Feature):
         return values
 
 
-class Atom0Count(AtomCount):
+class Atom0Count(AtomCountFeature):
 
     atom_idx = 0
 
 
-class Atom1Count(AtomCount):
+class Atom1Count(AtomCountFeature):
 
     atom_idx = 1
 
