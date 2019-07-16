@@ -131,9 +131,10 @@ dmypy.json
 
 # Others
 .DS_Store
-scripts/*
-!scripts/*.py
+.vscode
 data/
 notebooks/*
 !notebooks/*.ipynb
 results/
+scripts/*
+!scripts/*.py
