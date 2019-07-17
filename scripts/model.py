@@ -105,12 +105,13 @@ class LGBMRegressor(lightgbm.LGBMRegressor):
             "pred_leaf": pred_leaf,
             "pred_contrib": pred_contrib,
         }
-        return self.predict(X, **params, **kwargs)
+        return super().predict(X, **params, **kwargs)
 
     def calculate_score(self, y_valid, y_pred):
         score = []
         for scalar_coupling_type in y_valid["type"].unique():
-            idx = y_valid.query(f"type=='{scalar_coupling_type}'").index.values
-            y_true = y_valid.drop(columns="type").iloc[idx]
+            y_valid_ = y_valid.reset_index(drop=True)
+            idx = y_valid_.query(f"type=='{scalar_coupling_type}'").index.values
+            y_true = y_valid_.drop(columns="type").iloc[idx]
             score.append(np.log(mean_absolute_error(y_true, y_pred[idx])))
         return np.mean(score)

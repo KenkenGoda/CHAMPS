@@ -27,6 +27,7 @@ class Config:
         # submission file path
         self.submission_path = "../results/submission.csv"
 
+        # used feature names
         self.feature_names = [
             "MoleculeCount",
             "MoleculeDistanceStatistics",
@@ -34,6 +35,7 @@ class Config:
             "Atom1Count",
         ]
 
+        # target name
         self.target_name = ["fc"]
 
         # random seed

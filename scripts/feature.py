@@ -35,8 +35,8 @@ class Feature:
         for key, val in kwargs.items():
             setattr(self, key, val)
 
-    def run(self, dataset):
-        values = self.extract(dataset)
+    def run(self, df, dataset):
+        values = self.extract(df, dataset)
 
         if self.categories:
             if self.dummy:
@@ -67,7 +67,7 @@ class Feature:
         else:
             return [str(self)]
 
-    def extract(self, dataset, df):
+    def extract(self, df, dataset):
         raise NotImplementedError
 
 
@@ -77,14 +77,14 @@ class BasicFeature(Feature):
 
 
 class MoleculeCount(Feature):
-    def extract(self, dataset, df):
+    def extract(self, df, dataset):
         values = df.groupby("molecule_name").agg({"id": "count"})
         values.name = "molecule_couples"
         return values
 
 
 class MoleculeDistanceStatistics(Feature):
-    def extract(self, dataset, df):
+    def extract(self, df, dataset):
         values = df.groupby("molecule_name").agg({"dist": ["mean", "min", "max"]})
         values.columns = [
             "molecule_dist_mean",
@@ -98,11 +98,11 @@ class AtomCountFeature(Feature):
 
     atom_idx = None
 
-    def extract(self, dataset, df):
+    def extract(self, df, dataset):
         values = df.groupby(["molecule_name", f"atom_index_{self.atom_idx}"]).agg(
             {"id": "count"}
         )
-        values.name = f"atom_{self.atom_idx}_couples_count"
+        values.columns = [f"atom_{self.atom_idx}_couples_count"]
         return values
 
 

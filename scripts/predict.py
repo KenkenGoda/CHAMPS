@@ -2,7 +2,6 @@ import os
 
 import numpy as np
 import pandas as pd
-
 from sklearn.model_selection import KFold
 
 from .model import LGBMRegressor
@@ -11,14 +10,14 @@ from .tune import ParameterTuning
 
 class Prediction:
     def __init__(self, config):
-        self.config = config
         self.pickle_dir = config.pickle_dir
         self.target_name = config.target_name
+        self.seed = config.seed
 
     def run(
         self, X_train, y_train, X_test, tuning=False, n_trials=1, n_splits=5, save=False
     ):
-        pt = ParameterTuning()
+        pt = ParameterTuning(self.seed)
         if tuning:
             params = pt.run(X_train, y_train, n_trials=n_trials)
         else:
@@ -27,7 +26,7 @@ class Prediction:
                 params = {}
 
         self.model = LGBMRegressor(**params)
-        kf = KFold(n_splits=n_splits, shuffle=True, random_state=self.config.seed)
+        kf = KFold(n_splits=n_splits, shuffle=True, random_state=self.seed)
         score = []
         y_pred = []
         for train_idx, valid_idx in kf.split(X_train):
@@ -50,5 +49,7 @@ class Prediction:
     def _save(self, y_pred, index):
         os.makedirs(self.pickle_dir, exist_ok=True)
         prediction = pd.DataFrame(y_pred, index=index, columns=self.target_name)
-        prediction.to_pickle(os.path.join(self.pickle_dir, f"{self.target_name}.pkl"))
-        print(f"save {self.target_name} to pickle")
+        prediction.to_pickle(
+            os.path.join(self.pickle_dir, f"{self.target_name}_test.pkl")
+        )
+        print(f"save {self.target_name}_test to pickle")

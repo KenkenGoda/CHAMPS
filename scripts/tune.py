@@ -52,11 +52,11 @@ class ParameterTuning:
             study_name = "lgb_study"
             study = optuna.create_study(
                 study_name=study_name,
-                storage="sqlite:///../database/lgb.db",
+                storage=f"sqlite:///{storage}",
                 load_if_exists=True,
             )
-            print("Loading the best parameters")
+            print("load the best parameters")
             return study.best_params
         else:
-            print("There are no best parameters")
+            print("not found best parameters")
             return None
