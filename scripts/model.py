@@ -69,10 +69,6 @@ class LGBMRegressor(lightgbm.LGBMRegressor):
         categorical_feature="auto",
         callbacks=None,
     ):
-        # 学習データの保持
-        self.X_ = X
-        self.y_ = y
-
         params = {
             "sample_weight": sample_weight,
             "init_score": init_score,

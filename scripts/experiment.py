@@ -1,22 +1,28 @@
 from .config import Config
 from .db import LocalFile
-from .data import DatasetCreator, Dataset
+from .data import DatasetCreator
 from .dataproc import DataProcessor
 from .predict import Prediction
 
 
 class Experiment:
-    def run(self):
-        config = Config()
-        # creator = DatasetCreator()
-        # dataset = creator.run()
-        self.dataset = Dataset.load(config.pickle_dir)
-        # return dataset
+    def __init__(self, dataset=None, X_train=None, y_train=None, X_test=None):
+        self.dataset_ = dataset
+        self.X_train_ = X_train
+        self.y_train_ = y_train
+        self.X_test_ = X_test
 
-        processor = DataProcessor(config)
-        self.X_train, self.y_train, self.X_test = processor.run(self.dataset)
-        # return X_train, y_train, X_test
+    def run(self, nrows=None):
+        config = Config(nrows=nrows)
+
+        if self.dataset_ is None:
+            creator = DatasetCreator()
+            self.dataset_ = creator.run()
+
+        if self.X_train_ is None:
+            processor = DataProcessor(config)
+            self.X_train_, self.y_train_, self.X_test_ = processor.run(self.dataset_)
 
         predict = Prediction(config)
-        y_pred = predict.run(self.X_train, self.y_train, self.X_test, n_splits=3)
+        y_pred = predict.run(self.X_train_, self.y_train_, self.X_test_, n_splits=3)
         return y_pred

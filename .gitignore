@@ -131,8 +131,9 @@ dmypy.json
 
 # Others
 .DS_Store
-.vscode
+.vscode/
 data/
+pickle/
 notebooks/*
 !notebooks/*.ipynb
 results/

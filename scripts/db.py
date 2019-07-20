@@ -6,10 +6,10 @@ class LocalFile:
         self.config = config
 
     def get_train(self):
-        return pd.read_csv(self.config.train_path)
+        return pd.read_csv(self.config.train_path, nrows=self.config.nrows)
 
     def get_test(self):
-        return pd.read_csv(self.config.test_path)
+        return pd.read_csv(self.config.test_path, nrows=self.config.nrows)
 
     def get_submission(self):
         return pd.read_csv(self.config.sample_submission_path)

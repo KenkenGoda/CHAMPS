@@ -2,7 +2,10 @@ import os
 
 
 class Config:
-    def __init__(self, config_file=None):
+    def __init__(self, nrows=None):
+        # set the number of rows for reading files
+        self.nrows = nrows
+
         # raw data path
         self.data_dir = "../data"
         self.train_path = os.path.join(self.data_dir, "train.csv")
@@ -22,7 +25,7 @@ class Config:
         self.structures_path = os.path.join(self.data_dir, "structures.csv")
 
         # pickle directory path
-        self.pickle_dir = os.path.join(self.data_dir, "pickle")
+        self.pickle_dir = "../pickle"
 
         # submission file path
         self.submission_path = "../results/submission.csv"
@@ -37,6 +40,7 @@ class Config:
 
         # target name
         self.target_name = ["fc"]
+        print("Target:", self.target_name[0])
 
         # random seed
         self.seed = 42
