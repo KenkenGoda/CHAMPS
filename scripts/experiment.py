@@ -1,5 +1,4 @@
 from .config import Config
-from .db import LocalFile
 from .data import DatasetCreator
 from .dataproc import DataProcessor
 from .predict import Prediction
@@ -14,6 +13,7 @@ class Experiment:
 
     def run(self, nrows=None):
         config = Config(nrows=nrows)
+        print("Target:", config.target_name[0])
 
         if self.dataset_ is None:
             creator = DatasetCreator()
@@ -24,5 +24,13 @@ class Experiment:
             self.X_train_, self.y_train_, self.X_test_ = processor.run(self.dataset_)
 
         predict = Prediction(config)
-        y_pred = predict.run(self.X_train_, self.y_train_, self.X_test_, n_splits=3)
+        y_pred = predict.run(
+            self.X_train_,
+            self.y_train_,
+            self.X_test_,
+            tuning=False,
+            n_trials=1,
+            n_splits=3,
+            save=False,
+        )
         return y_pred

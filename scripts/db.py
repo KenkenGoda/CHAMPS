@@ -1,3 +1,5 @@
+import os
+
 import pandas as pd
 
 
@@ -6,10 +8,22 @@ class LocalFile:
         self.config = config
 
     def get_train(self):
-        return pd.read_csv(self.config.train_path, nrows=self.config.nrows)
+        if os.path.isfile(self.config.train_pickle_path):
+            return pd.read_pickle(self.config.train_pickle_path)
+        else:
+            return pd.read_csv(self.config.train_path, nrows=self.config.nrows)
 
     def get_test(self):
-        return pd.read_csv(self.config.test_path, nrows=self.config.nrows)
+        if os.path.isfile(self.config.test_pickle_path):
+            return pd.read_pickle(self.config.test_pickle_path)
+        else:
+            return pd.read_csv(self.config.test_path, nrows=self.config.nrows)
+
+    def get_structures(self):
+        if os.path.isfile(self.config.structures_pickle_path):
+            return pd.read_pickle(self.config.structures_pickle_path)
+        else:
+            return pd.read_csv(self.config.structures_path)
 
     def get_submission(self):
         return pd.read_csv(self.config.sample_submission_path)
@@ -28,7 +42,4 @@ class LocalFile:
 
     def get_scalar_coupling_contributions(self):
         return pd.read_csv(self.config.scalar_coupling_contributions_path)
-
-    def get_structures(self):
-        return pd.read_csv(self.config.structures_path)
 

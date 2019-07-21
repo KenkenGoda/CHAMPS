@@ -1,7 +1,7 @@
 import os
-from tqdm import tqdm
 
 import pandas as pd
+from tqdm import tqdm
 
 from .feature import FeatureFactory
 
