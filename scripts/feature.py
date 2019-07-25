@@ -1,6 +1,9 @@
 import inspect
+import os
 
 import pandas as pd
+
+from .config import Config
 
 
 class FeatureFactory:
@@ -19,6 +22,7 @@ class FeatureFactory:
                 Feature,
                 BasicFeature,
                 AtomCountFeature,
+                PredictedFeature,
             ]:
                 lst.append(obj.__name__)
         return lst
@@ -170,3 +174,38 @@ class Atom(Feature):
     df[f'molecule_type_dist_std_diff'] = df[f'molecule_type_dist_std'] - df['dist']
     df = reduce_mem_usage(df)
 """
+
+
+class PredictedFeature(Feature):
+
+    column = None
+
+    def extract(self, df, dataset):
+        if self.column in df.columns:
+            values = df[self.column]
+        else:
+            values = pd.read_pickle(
+                os.path.join(Config().pickle_dir, f"{self.column}_test.pkl")
+            )
+        return values
+
+
+class FermiContact(PredictedFeature):
+
+    column = "fc"
+
+
+class SpinDipolar(PredictedFeature):
+
+    column = "sd"
+
+
+class ParaMagneticSpinOrbit(PredictedFeature):
+
+    column = "pso"
+
+
+class DiamagneticSpinOrbit(PredictedFeature):
+
+    column = "dso"
+

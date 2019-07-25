@@ -13,7 +13,7 @@ class Experiment:
 
     def run(self, nrows=None):
         config = Config(nrows=nrows)
-        print("Target:", config.target_name[0])
+        print("Target:", config.target_name)
 
         if self.dataset_ is None:
             creator = DatasetCreator()

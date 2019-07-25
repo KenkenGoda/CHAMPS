@@ -3,9 +3,9 @@ import pandas as pd
 
 
 class Preprocessor:
-    def run(self, train, test, structures):
+    def run(self, train, test, structures, scalar_couling_contributions):
         structures = self.preprocess_structures(structures)
-        train = self.preprocess_train(train, structures)
+        train = self.preprocess_train(train, structures, scalar_couling_contributions)
         test = self.preprocess_test(test, structures)
         return train, test, structures
 
@@ -96,12 +96,16 @@ class Preprocessor:
         structures = structures.join(bond_df)
         return structures
 
-    def preprocess_train(self, train, structures):
+    def preprocess_train(self, train, structures, scalar_couling_contributions):
         train = train.copy()
         train = self._map_atom_info(train, structures, 0)
         train = self._map_atom_info(train, structures, 1)
         train = self._get_distance_between_atoms(train)
         train["type_0"] = train["type"].apply(lambda x: x[0])
+        train = train.merge(
+            scalar_couling_contributions,
+            on=["molecule_name", "atom_index_0", "atom_index_1", "type"],
+        )
         return train.set_index(["molecule_name", "atom_index_0", "atom_index_1"])
 
     def preprocess_test(self, test, structures):

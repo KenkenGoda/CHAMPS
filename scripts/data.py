@@ -27,7 +27,9 @@ class DatasetCreator:
         # preprocess data
         if not os.path.isfile(self.config.train_pickle_path):
             preprocessor = Preprocessor()
-            train, test, structures = preprocessor.run(train, test, structures)
+            train, test, structures = preprocessor.run(
+                train, test, structures, scalar_coupling_contributions
+            )
 
             # save preprocessed dataframe to pickle
             train.to_pickle(self.config.train_pickle_path)
@@ -45,7 +47,6 @@ class DatasetCreator:
                 # "magnetic_shielding_tensors",
                 # "mulliken_charges",
                 # "potential_energy",
-                "scalar_coupling_contributions",
                 "structures",
             ],
         )
@@ -57,9 +58,6 @@ class DatasetCreator:
             # magnetic_shielding_tensors.set_index("molecule_name"),
             # mulliken_charges.set_index("molecule_name"),
             # potential_energy.set_index("molecule_name"),
-            scalar_coupling_contributions.set_index(
-                ["molecule_name", "atom_index_0", "atom_index_1"]
-            ),
             structures.set_index("molecule_name"),
         )
         return dataset

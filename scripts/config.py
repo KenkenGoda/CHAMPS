@@ -26,9 +26,9 @@ class Config:
 
         # pickle directory path
         self.pickle_dir = "../pickle"
-        self.train_pickle_path = os.path.join(self.pickle_dir, "train.csv")
-        self.test_pickle_path = os.path.join(self.pickle_dir, "test.csv")
-        self.structures_pickle_path = os.path.join(self.pickle_dir, "structures.csv")
+        self.train_pickle_path = os.path.join(self.pickle_dir, "train.pkl")
+        self.test_pickle_path = os.path.join(self.pickle_dir, "test.pkl")
+        self.structures_pickle_path = os.path.join(self.pickle_dir, "structures.pkl")
 
         # submission file path
         self.submission_path = "../results/submission.csv"
@@ -42,7 +42,7 @@ class Config:
         ]
 
         # target name
-        self.target_name = ["fc"]
+        self.target_name = "fc"
 
         # random seed
         self.seed = 42

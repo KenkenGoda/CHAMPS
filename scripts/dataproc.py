@@ -19,11 +19,7 @@ class DataProcessor:
         X_test = self._make_X(dataset.test, dataset, "test")
 
         # y
-        if self.target_name == "scalar_coupling_constant":
-            y_train = dataset.train["scalar_coupling_constant"]
-        else:
-            y_train = dataset.scalar_coupling_contributions[self.target_name]
-        y_train["type"] = dataset.train["type"]
+        y_train = dataset.train[["type", self.target_name]]
 
         return X_train, y_train, X_test
 
