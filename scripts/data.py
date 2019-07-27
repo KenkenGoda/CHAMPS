@@ -25,16 +25,16 @@ class DatasetCreator:
         structures = db.get_structures()
 
         # preprocess data
-        if not os.path.isfile(self.config.train_pickle_path):
+        if not os.path.isfile(self.config.pickled_train_path):
             preprocessor = Preprocessor()
             train, test, structures = preprocessor.run(
                 train, test, structures, scalar_coupling_contributions
             )
 
             # save preprocessed dataframe to pickle
-            train.to_pickle(self.config.train_pickle_path)
-            test.to_pickle(self.config.test_pickle_path)
-            structures.to_pickle(self.config.structures_pickle_path)
+            train.to_pickle(self.config.pickled_train_path)
+            test.to_pickle(self.config.pickled_test_path)
+            structures.to_pickle(self.config.pickled_structures_path)
 
         # create dataset
         Dataset = namedtuple(

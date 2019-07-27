@@ -9,7 +9,7 @@ from .feature import FeatureFactory
 class DataProcessor:
     def __init__(self, config):
         self.config = config
-        self.pickle_dir = config.pickle_dir
+        self.pickled_feature_dir = config.pickled_feature_dir
         self.feature_names = config.feature_names
         self.target_name = config.target_name
 
@@ -30,19 +30,20 @@ class DataProcessor:
         X = pd.DataFrame(index=df.index)
         for feature in tqdm(features):
             name = feature.__class__.__name__
-            if os.path.isfile(os.path.join(self.pickle_dir, f"{name}_{kind}.pkl")):
-                values = self.load_feature(self.pickle_dir, name, kind)
+            path = os.path.join(self.pickled_feature_dir, f"{kind}", f"{name}.pkl")
+            if os.path.isfile(path):
+                values = self.load_feature(path)
             else:
                 values = pd.DataFrame(feature.run(df, dataset))
-                self._save_feature(values, name, kind)
+                self._save_feature(values, path)
+                print(f"save {name} feature for {kind} to pickle")
             X = X.join(values)
         return X
 
-    def _save_feature(self, values, name, kind):
-        os.makedirs(self.pickle_dir, exist_ok=True)
-        values.to_pickle(os.path.join(self.pickle_dir, f"{name}_{kind}.pkl"))
-        print(f"save {name}_{kind} class to pickle")
+    @staticmethod
+    def _save_feature(values, path):
+        values.to_pickle(path)
 
     @classmethod
-    def load_feature(cls, save_dir, name, kind):
-        return pd.read_pickle(os.path.join(save_dir, f"{name}_{kind}.pkl"))
+    def load_feature(cls, path):
+        return pd.read_pickle(path)

@@ -1,62 +1,71 @@
 import os
 
+import numpy as np
 import optuna
+from sklearn.model_selection import KFold
 
 from .model import LGBMRegressor
 
 
 class ParameterTuning:
-    def __init__(self, seed):
-        self.seed = seed
+    def __init__(self, config):
+        self.target_name = config.target_name
+        self.study_name = config.study_name
+        self.storage_path = config.storage_path
+        self.fixed_params = config.fixed_params
+        self.param_space = config.param_space
+        self.seed = config.seed
 
-    def run(self, X, y, n_trials=1):
+    def run(self, X, y, n_trials=1, n_splits=2):
         def objective(trial):
-            params = {
-                "boosting_type": "goss",
-                "num_leaves": trial.suggest_int("num_leaves", 2e0, 1e1),
-                "n_estimators": int(1e6),
-                "subsample_for_bin": trial.suggest_int("subsample_for_bin", 2e0, 1e2),
-                "min_child_samples": trial.suggest_int("min_child_samples", 3e0, 1e2),
-                "reg_alpha": trial.suggest_loguniform("reg_alpha", 1e-2, 1e-1),
-                "reg_lambda": trial.suggest_loguniform("reg_lambda", 1e-2, 1e2),
-            }
+            params = {key: space(trial) for key, space in self.param_space.items()}
+            params.update(self.fixed_params)
             model = LGBMRegressor(**params)
+            kf = KFold(n_splits=n_splits, shuffle=True, random_state=self.seed)
+            score = []
+            for train_idx, valid_idx in kf.split(X):
+                X_train_ = X.iloc[train_idx]
+                y_train_ = y.iloc[train_idx][self.target_name]
+                X_valid_ = X.iloc[valid_idx]
+                y_valid_ = y.iloc[valid_idx]
+                model.fit(
+                    X_train_,
+                    y_train_,
+                    eval_set=(X_valid_, y_valid_[self.target_name]),
+                    early_stopping_rounds=3,
+                    verbose=False,
+                )
+                y_pred_ = model.predict(X_valid_)
+                score.append(model.calculate_score(y_valid_, y_pred_))
+            score = np.mean(score)
+            return score
 
-            return 1.0 - auc
-
-        ## X_train, y_train, X_valid, y_validに分ける
-
-        study_name = "lgb_study"
         study = optuna.create_study(
-            study_name=study_name,
-            storage="sqlite:///../database/lgb.db",
+            study_name=self.study_name,
+            storage=f"sqlite:///{self.storage_path}",
             load_if_exists=True,
         )
-        study.optimize(objective, n_trials=n_trials, n_jobs=-1)
-        return study.best_params
 
-    def _evaluate(self, model, X_train, y_train, X_valid, y_valid):
-        model.fit(
-            X_train,
-            y_train,
-            eval_set=[(X_valid, y_valid)],
-            early_stopping_rounds=3,
-            verbose=False,
-        )
-        y_pred = model.predict(X_valid)
-        return model.calculate_score(y_valid, y_pred)
+        # search the best parameters with optuna
+        study.optimize(objective, n_trials=n_trials, n_jobs=-1)
+
+        # get the best parameters
+        best_params = study.best_params
+        best_params.update(self.fixed_params)
+        return best_params
 
     def get_best_params(self):
-        storage = "../database/lgb.db"
-        if os.path.isfile(storage):
-            study_name = "lgb_study"
+        if os.path.isfile(self.storage_path):
             study = optuna.create_study(
-                study_name=study_name,
-                storage=f"sqlite:///{storage}",
+                study_name=self.study_name,
+                storage=f"sqlite:///{self.storage_path}",
                 load_if_exists=True,
             )
             print("load the best parameters")
-            return study.best_params
+            params = study.best_params
+            params.update(self.fixed_params)
+            print(params)
+            return params
         else:
-            print("not found best parameters")
+            print("Not found the best parameters")
             return None

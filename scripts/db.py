@@ -8,20 +8,20 @@ class LocalFile:
         self.config = config
 
     def get_train(self):
-        if os.path.isfile(self.config.train_pickle_path):
-            return pd.read_pickle(self.config.train_pickle_path)
+        if os.path.isfile(self.config.pickled_train_path):
+            return pd.read_pickle(self.config.pickled_train_path)
         else:
             return pd.read_csv(self.config.train_path, nrows=self.config.nrows)
 
     def get_test(self):
-        if os.path.isfile(self.config.test_pickle_path):
-            return pd.read_pickle(self.config.test_pickle_path)
+        if os.path.isfile(self.config.pickled_test_path):
+            return pd.read_pickle(self.config.pickled_test_path)
         else:
             return pd.read_csv(self.config.test_path, nrows=self.config.nrows)
 
     def get_structures(self):
-        if os.path.isfile(self.config.structures_pickle_path):
-            return pd.read_pickle(self.config.structures_pickle_path)
+        if os.path.isfile(self.config.pickled_structures_path):
+            return pd.read_pickle(self.config.pickled_structures_path)
         else:
             return pd.read_csv(self.config.structures_path)
 

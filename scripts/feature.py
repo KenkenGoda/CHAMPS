@@ -18,6 +18,7 @@ class FeatureFactory:
         for name in globals():
             obj = globals()[name]
             if inspect.isclass(obj) and obj not in [
+                Config,
                 FeatureFactory,
                 Feature,
                 BasicFeature,
@@ -177,6 +178,7 @@ class Atom(Feature):
 
 
 class PredictedFeature(Feature):
+    """ Predicted features that construct scalar coupling constant """
 
     column = None
 
@@ -184,9 +186,12 @@ class PredictedFeature(Feature):
         if self.column in df.columns:
             values = df[self.column]
         else:
-            values = pd.read_pickle(
-                os.path.join(Config().pickle_dir, f"{self.column}_test.pkl")
-            )
+            try:
+                values = pd.read_pickle(
+                    os.path.join(Config().pickle_dir, f"{self.column}_test.pkl")
+                )
+            except ValueError:
+                print(f"Not found pickled {self.column}.")
         return values
 
 
@@ -208,4 +213,3 @@ class ParaMagneticSpinOrbit(PredictedFeature):
 class DiamagneticSpinOrbit(PredictedFeature):
 
     column = "dso"
-
