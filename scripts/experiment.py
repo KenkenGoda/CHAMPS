@@ -28,7 +28,7 @@ class Experiment:
             self.X_train_,
             self.y_train_,
             self.X_test_,
-            tuning=True,
+            tuning=False,
             n_trials=1,
             n_splits=2,
             save=False,

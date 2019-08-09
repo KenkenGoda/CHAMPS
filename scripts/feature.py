@@ -75,10 +75,50 @@ class Feature:
     def extract(self, df, dataset):
         raise NotImplementedError
 
+    @staticmethod
+    def _get_converted_multi_columns(df, head_name=None):
+        if head_name:
+            return [
+                head_name + "_" + col[0] + "_" + col[1] for col in df.columns.values
+            ]
+        else:
+            return [col[0] + "_" + col[1] for col in df.columns.values]
+
 
 class BasicFeature(Feature):
     def __init__(self):
         pass
+
+
+class MoleculeStatisticsFeature(Feature):
+
+    column = None
+    representative_value = None
+    head_name = None
+
+    def extract(self, df, dataset):
+        agg = {self.column: self.representative_value}
+        values = df.groupby("molecule_name").agg(agg)
+        values.columns = self._get_converted_multi_columns(
+            values, head_name=self.head_name
+        )
+        return values
+
+
+class AtomStatisticsFeature(Feature):
+
+    column = None
+    representative_value = None
+    atom_idx = None
+    head_name = None
+
+    def extract(self, df, dataset):
+        agg = {self.column: self.representative_value}
+        values = df.groupby(["molecule_name", f"atom_index_{self.atom_idx}"]).agg(agg)
+        values.columns = self._get_converted_multi_columns(
+            values, head_name=self.head_name
+        )
+        return values
 
 
 class MoleculeCount(Feature):
