@@ -42,4 +42,3 @@ class LocalFile:
 
     def get_scalar_coupling_contributions(self):
         return pd.read_csv(self.config.scalar_coupling_contributions_path)
-

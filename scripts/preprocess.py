@@ -132,6 +132,15 @@ class Preprocessor:
                 "z": f"z_{atom_idx}",
             }
         )
+        drop_cols = [
+            "atom_index",
+            "electronegativity",
+            "radius",
+            "n_bonds",
+            "bond_lengths_mean",
+            "bond_lengths_std",
+        ]
+        df = df.drop(columns=drop_cols)
         return df
 
     def _get_distance_between_atoms(self, df):

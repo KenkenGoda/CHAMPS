@@ -16,7 +16,6 @@ class DatasetCreator:
         db = LocalFile(self.config)
         train = db.get_train()
         test = db.get_test()
-        # submission = db.get_submission()
         # dipole_moments = db.get_dipole_moments()
         # magnetic_shielding_tensors = db.get_magnetic_shielding_tensors()
         # mulliken_charges = db.get_mulliken_charges()
@@ -42,7 +41,6 @@ class DatasetCreator:
             [
                 "train",
                 "test",
-                # "submission",
                 # "dipole_moments",
                 # "magnetic_shielding_tensors",
                 # "mulliken_charges",
@@ -53,7 +51,6 @@ class DatasetCreator:
         dataset = Dataset(
             train,
             test,
-            # submission,
             # dipole_moments.set_index("molecule_name"),
             # magnetic_shielding_tensors.set_index("molecule_name"),
             # mulliken_charges.set_index("molecule_name"),

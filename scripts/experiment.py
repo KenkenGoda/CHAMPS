@@ -29,8 +29,8 @@ class Experiment:
             self.y_train_,
             self.X_test_,
             tuning=False,
-            n_trials=1,
+            n_trials=10,
             n_splits=2,
-            save=False,
+            save=True,
         )
         return y_pred

@@ -8,25 +8,25 @@
 
 # 3. Creating Feature
 - create features for learning model
-- include results predicted as sub-targets
+- not include the results predicted as sub-targets
 
 # 4. Learning Model
 - learn model with crated features
-- need parameter tuning on each prediction, respectively
+- need parameter tuning on each prediction
 
 # 5. Target Prediction
-- predict the selected target with model
+- predict the selected target with the learned model
 
 # 6. Creating Final Feature
-- conme to this phase after predicting all sub-targets
+- come to this phase after predicting all sub-targets
 - create final features for learning final model
-- include results predicted as sub-targets
+- include the results predicted as sub-targets
 
 # 7. Learning Final Model
-- learn final model with created final features
+- learn final model with the created final features
 
 # 8. Final Target Prediction
-- predict the final target with final model
+- predict the final target with the final learned model
 
 # 9. Submission
 - make the submission file

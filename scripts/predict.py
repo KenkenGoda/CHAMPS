@@ -40,7 +40,7 @@ class Prediction:
                 y_train_,
                 eval_set=(X_valid_, y_valid_[self.target_name]),
                 early_stopping_rounds=3,
-                verbose=False,
+                verbose=500,
             )
             y_pred_ = self.model.predict(X_valid_)
             score.append(self.model.calculate_score(y_valid_, y_pred_))
