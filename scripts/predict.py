@@ -54,7 +54,8 @@ class Prediction:
         return y_pred
 
     def _save_predicted_feature(self, y_pred, index):
-        predicted_feature = pd.DataFrame(y_pred, index=index, columns=self.target_name)
+        predicted_feature = pd.DataFrame(y_pred, index=index)
+        predicted_feature.columns = [self.target_name]
         path = os.path.join(self.pickled_feature_dir, "test", f"{self.target_name}.pkl")
         predicted_feature.to_pickle(path)
         print(f"save {self.target_name} for test to pickle")

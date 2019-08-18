@@ -517,9 +517,10 @@ class PredictedFeature(Feature):
             values = df[self.column]
         else:
             try:
-                values = pd.read_pickle(
-                    os.path.join(Config().pickle_dir, f"{self.column}_test.pkl")
+                path = os.path.join(
+                    Config().pickled_feature_dir, "test", f"{self.column}.pkl"
                 )
+                values = pd.read_pickle(path)
             except ValueError:
                 print(f"Not found pickled {self.column}.")
         return values
