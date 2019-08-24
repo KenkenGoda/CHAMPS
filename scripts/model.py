@@ -1,5 +1,6 @@
 import numpy as np
 import lightgbm
+import sklearn.linear_model
 from sklearn.metrics import mean_absolute_error
 
 
@@ -102,6 +103,62 @@ class LGBMRegressor(lightgbm.LGBMRegressor):
             "pred_contrib": pred_contrib,
         }
         return super().predict(X, **params, **kwargs)
+
+    def calculate_score(self, y_valid, y_pred):
+        score = []
+        for scalar_coupling_type in y_valid["type"].unique():
+            y_valid_ = y_valid.reset_index(drop=True)
+            idx = y_valid_.query(f"type=='{scalar_coupling_type}'").index.values
+            y_true = y_valid_.drop(columns="type").iloc[idx]
+            score.append(np.log(mean_absolute_error(y_true, y_pred[idx])))
+        return np.mean(score)
+
+
+class LogisticRegression(sklearn.linear_model.LogisticRegression):
+    def __init__(
+        self,
+        penalty="l2",
+        dual=False,
+        tol=0.0001,
+        C=1.0,
+        fit_intercept=True,
+        intercept_scaling=1,
+        class_weight=None,
+        random_state=None,
+        solver="warn",
+        max_iter=100,
+        multi_class="warn",
+        verbose=0,
+        warm_start=False,
+        n_jobs=None,
+        l1_ratio=None,
+        **kwargs,
+    ):
+        params = {
+            "penalty": penalty,
+            "dual": dual,
+            "tol": tol,
+            "C": C,
+            "fit_intercept": fit_intercept,
+            "intercept_scaling": intercept_scaling,
+            "class_weight": class_weight,
+            "random_state": random_state,
+            "solver": solver,
+            "max_iter": max_iter,
+            "multi_class": multi_class,
+            "verbose": verbose,
+            "warm_start": warm_start,
+            "n_jobs": n_jobs,
+            "l1_ratio": l1_ratio,
+        }
+        super.__init__(**params, **kwargs)
+
+    def fit(self, X, y, sample_weight=None):
+        super.fit(X, y, sample_weight=sample_weight)
+        return self
+
+    def predict(self, X):
+        return super.predict(X)
 
     def calculate_score(self, y_valid, y_pred):
         score = []

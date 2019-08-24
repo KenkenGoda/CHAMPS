@@ -1,7 +1,7 @@
 from .config import Config
 from .data import DatasetCreator
 from .dataproc import DataProcessor
-from .predict import Prediction
+from .predict_subtarget import SubTargetPrediction
 
 
 class Experiment:
@@ -23,14 +23,6 @@ class Experiment:
             processor = DataProcessor(config)
             self.X_train_, self.y_train_, self.X_test_ = processor.run(self.dataset_)
 
-        predict = Prediction(config)
-        y_pred = predict.run(
-            self.X_train_,
-            self.y_train_,
-            self.X_test_,
-            tuning=True,
-            n_trials=1,
-            n_splits=5,
-            save=False,
-        )
+        sub_predict = SubTargetPrediction(config)
+        y_pred = sub_predict.run(self.X_train_, self.y_train_, self.X_test_)
         return y_pred

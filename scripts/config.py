@@ -45,16 +45,16 @@ class Config:
             "MoleculeType0",
             "Atom0",
             "Atom1",
-            "AtomX0",
-            "AtomX1",
-            "AtomY0",
-            "AtomY1",
-            "AtomZ0",
-            "AtomZ1",
+            # "AtomX0",
+            # "AtomX1",
+            # "AtomY0",
+            # "AtomY1",
+            # "AtomZ0",
+            # "AtomZ1",
             "MoleculeDistance",
-            "MoleculeDistanceX",
-            "MoleculeDistanceY",
-            "MoleculeDistanceZ",
+            # "MoleculeDistanceX",
+            # "MoleculeDistanceY",
+            # "MoleculeDistanceZ",
             "MoleculeCount",
             "MoleculeX0Statistics",
             "MoleculeX1Statistics",
@@ -63,32 +63,32 @@ class Config:
             "MoleculeZ0Statistics",
             "MoleculeZ1Statistics",
             "MoleculeDistanceStatistics",
-            "MoleculeDistanceXStatistics",
-            "MoleculeDistanceYStatistics",
-            "MoleculeDistanceZStatistics",
+            # "MoleculeDistanceXStatistics",
+            # "MoleculeDistanceYStatistics",
+            # "MoleculeDistanceZStatistics",
             "Atom0Count",
             "Atom1Count",
-            "Atom0X1Statistics",
-            "Atom1X0Statistics",
-            "Atom0Y1Statistics",
-            "Atom1Y0Statistics",
-            "Atom0Z1Statistics",
-            "Atom1Z0Statistics",
+            # "Atom0X1Statistics",
+            # "Atom1X0Statistics",
+            # "Atom0Y1Statistics",
+            # "Atom1Y0Statistics",
+            # "Atom0Z1Statistics",
+            # "Atom1Z0Statistics",
             "Atom0DistanceStatistics",
             "Atom1DistanceStatistics",
-            "Atom0DistanceXStatistics",
-            "Atom1DistanceXStatistics",
-            "Atom0DistanceYStatistics",
-            "Atom1DistanceYStatistics",
-            "Atom0DistanceZStatistics",
-            "Atom1DistanceZStatistics",
+            # "Atom0DistanceXStatistics",
+            # "Atom1DistanceXStatistics",
+            # "Atom0DistanceYStatistics",
+            # "Atom1DistanceYStatistics",
+            # "Atom0DistanceZStatistics",
+            # "Atom1DistanceZStatistics",
             # "TypeX0Statistics",
             # "TypeX1Statistics",
             # "TypeY0Statistics",
             # "TypeY1Statistics",
             # "TypeZ0Statistics",
             # "TypeZ1Statistics",
-            # "TypeDistanceStatistics",
+            "TypeDistanceStatistics",
             # "TypeDistanceXStatistics",
             # "TypeDistanceYStatistics",
             # "TypeDistanceZStatistics",
@@ -102,6 +102,18 @@ class Config:
         # sub-target: "fc", "sd", "pso", "dso"
         # target: "scalar_coupling_constant"
         self.target_name = "fc"
+
+        # whether excute tuning
+        self.tuning = False
+
+        # number of trials for tuning
+        self.n_trials = 1
+
+        # number of splits for data
+        self.n_splits = 5
+
+        # whether save the predicted values
+        self.save = True
 
         # study name and storage path of parameters for the best model
         self.study_name = f"lgb_{self.target_name}"
@@ -123,9 +135,9 @@ class Config:
             "subsample": UniformParamSpace("subsample", 0.5, 1.0),
             "subsample_freq": IntParamSpace("subsample_freq", 1, 20),
             "colsample_bytree": LogUniformParamSpace("colsample_bytree", 1e-2, 1e-1),
-            # "min_child_weight": LogUniformParamSpace("min_child_weight", 1e-3, 1e1),
-            # "min_child_samples": IntParamSpace("min_child_samples", 1, 50),
-            # "reg_lambda": LogUniformParamSpace("reg_lambda", 1e-1, 1e4),
+            "min_child_weight": LogUniformParamSpace("min_child_weight", 1e-3, 1e1),
+            "min_child_samples": IntParamSpace("min_child_samples", 1, 50),
+            "reg_lambda": LogUniformParamSpace("reg_lambda", 1e-1, 1e4),
         }
 
         # random seed

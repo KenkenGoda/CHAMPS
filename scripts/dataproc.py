@@ -3,6 +3,7 @@ import os
 import pandas as pd
 from tqdm import tqdm
 
+from .utility import reduce_mem_usage
 from .feature import FeatureFactory
 
 
@@ -35,6 +36,7 @@ class DataProcessor:
                 values = self.load_feature(path)
             else:
                 values = pd.DataFrame(feature.run(df, dataset))
+                values = reduce_mem_usage(values, name)
                 self._save_feature(values, path)
                 print(f"save {name} feature for {kind} to pickle")
             X = X.join(values)

@@ -211,70 +211,70 @@ class MoleculeCount(MoleculeStatisticsFeature):
 class MoleculeX0Statistics(MoleculeStatisticsFeature):
 
     column = "x_0"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "molecule"
 
 
 class MoleculeX1Statistics(MoleculeStatisticsFeature):
 
     column = "x_1"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "molecule"
 
 
 class MoleculeY0Statistics(MoleculeStatisticsFeature):
 
     column = "y_0"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "molecule"
 
 
 class MoleculeY1Statistics(MoleculeStatisticsFeature):
 
     column = "y_1"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "molecule"
 
 
 class MoleculeZ0Statistics(MoleculeStatisticsFeature):
 
     column = "z_0"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "molecule"
 
 
 class MoleculeZ1Statistics(MoleculeStatisticsFeature):
 
     column = "z_1"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "molecule"
 
 
 class MoleculeDistanceStatistics(MoleculeStatisticsFeature):
 
     column = "dist"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "molecule"
 
 
 class MoleculeDistanceXStatistics(MoleculeStatisticsFeature):
 
     column = "dist_x"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "molecule"
 
 
 class MoleculeDistanceYStatistics(MoleculeStatisticsFeature):
 
     column = "dist_y"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "molecule"
 
 
 class MoleculeDistanceZStatistics(MoleculeStatisticsFeature):
 
     column = "dist_z"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "molecule"
 
 
@@ -298,7 +298,7 @@ class Atom0X1Statistics(AtomStatisticsFeature):
 
     atom_idx = 0
     column = "x_1"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "atom_0"
 
 
@@ -306,7 +306,7 @@ class Atom1X0Statistics(AtomStatisticsFeature):
 
     atom_idx = 1
     column = "x_0"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "atom_0"
 
 
@@ -314,7 +314,7 @@ class Atom0Y1Statistics(AtomStatisticsFeature):
 
     atom_idx = 0
     column = "y_1"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "atom_0"
 
 
@@ -322,7 +322,7 @@ class Atom1Y0Statistics(AtomStatisticsFeature):
 
     atom_idx = 1
     column = "y_0"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "atom_0"
 
 
@@ -330,7 +330,7 @@ class Atom0Z1Statistics(AtomStatisticsFeature):
 
     atom_idx = 0
     column = "z_1"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "atom_0"
 
 
@@ -338,7 +338,7 @@ class Atom1Z0Statistics(AtomStatisticsFeature):
 
     atom_idx = 1
     column = "z_0"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "atom_0"
 
 
@@ -346,7 +346,7 @@ class Atom0DistanceStatistics(AtomStatisticsFeature):
 
     atom_idx = 0
     column = "dist"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "atom_0"
 
 
@@ -354,7 +354,7 @@ class Atom1DistanceStatistics(AtomStatisticsFeature):
 
     atom_idx = 1
     column = "dist"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "atom_1"
 
 
@@ -362,7 +362,7 @@ class Atom0DistanceXStatistics(AtomStatisticsFeature):
 
     atom_idx = 0
     column = "dist_x"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "atom_0"
 
 
@@ -370,7 +370,7 @@ class Atom1DistanceXStatistics(AtomStatisticsFeature):
 
     atom_idx = 1
     column = "dist_x"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "atom_1"
 
 
@@ -378,7 +378,7 @@ class Atom0DistanceYStatistics(AtomStatisticsFeature):
 
     atom_idx = 0
     column = "dist_y"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "atom_0"
 
 
@@ -386,7 +386,7 @@ class Atom1DistanceYStatistics(AtomStatisticsFeature):
 
     atom_idx = 1
     column = "dist_y"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "atom_1"
 
 
@@ -394,7 +394,7 @@ class Atom0DistanceZStatistics(AtomStatisticsFeature):
 
     atom_idx = 0
     column = "dist_z"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "atom_0"
 
 
@@ -402,77 +402,77 @@ class Atom1DistanceZStatistics(AtomStatisticsFeature):
 
     atom_idx = 1
     column = "dist_z"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "atom_1"
 
 
 class TypeX0Statistics(TypeStatisticsFeature):
 
     column = "x_0"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "type"
 
 
 class TypeX1Statistics(TypeStatisticsFeature):
 
     column = "x_1"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "type"
 
 
 class TypeY0Statistics(TypeStatisticsFeature):
 
     column = "y_0"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "type"
 
 
 class TypeY1Statistics(TypeStatisticsFeature):
 
     column = "y_1"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "type"
 
 
 class TypeZ0Statistics(TypeStatisticsFeature):
 
     column = "z_0"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "type"
 
 
 class TypeZ1Statistics(TypeStatisticsFeature):
 
     column = "z_1"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "type"
 
 
 class TypeDistanceStatistics(TypeStatisticsFeature):
 
     column = "dist"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "type"
 
 
 class TypeDistanceXStatistics(TypeStatisticsFeature):
 
     column = "dist_x"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "type"
 
 
 class TypeDistanceYStatistics(TypeStatisticsFeature):
 
     column = "dist_y"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "type"
 
 
 class TypeDistanceZStatistics(TypeStatisticsFeature):
 
     column = "dist_z"
-    representative_values = ["min", "max", "mean", "std"]
+    representative_values = ["min", "max", "mean"]
     head_name = "type"
 
 
