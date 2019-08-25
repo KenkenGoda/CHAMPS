@@ -3,7 +3,7 @@ from scripts.experiment import Experiment
 
 def main():
     ex = Experiment()
-    y_pred = ex.run(nrows=None)
+    y_pred = ex.run_for_subtarget()
     return y_pred
 
 

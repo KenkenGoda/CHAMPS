@@ -4,10 +4,7 @@ from .param_space import IntParamSpace, UniformParamSpace, LogUniformParamSpace
 
 
 class Config:
-    def __init__(self, nrows=None):
-        # set the number of rows for reading files
-        self.nrows = nrows
-
+    def __init__(self):
         # raw data path
         self.data_dir = "../data"
         self.train_path = os.path.join(self.data_dir, "train.csv")
@@ -45,16 +42,16 @@ class Config:
             "MoleculeType0",
             "Atom0",
             "Atom1",
-            # "AtomX0",
-            # "AtomX1",
-            # "AtomY0",
-            # "AtomY1",
-            # "AtomZ0",
-            # "AtomZ1",
+            "AtomX0",
+            "AtomX1",
+            "AtomY0",
+            "AtomY1",
+            "AtomZ0",
+            "AtomZ1",
             "MoleculeDistance",
-            # "MoleculeDistanceX",
-            # "MoleculeDistanceY",
-            # "MoleculeDistanceZ",
+            "MoleculeDistanceX",
+            "MoleculeDistanceY",
+            "MoleculeDistanceZ",
             "MoleculeCount",
             "MoleculeX0Statistics",
             "MoleculeX1Statistics",
@@ -63,35 +60,35 @@ class Config:
             "MoleculeZ0Statistics",
             "MoleculeZ1Statistics",
             "MoleculeDistanceStatistics",
-            # "MoleculeDistanceXStatistics",
-            # "MoleculeDistanceYStatistics",
-            # "MoleculeDistanceZStatistics",
+            "MoleculeDistanceXStatistics",
+            "MoleculeDistanceYStatistics",
+            "MoleculeDistanceZStatistics",
             "Atom0Count",
             "Atom1Count",
-            # "Atom0X1Statistics",
-            # "Atom1X0Statistics",
-            # "Atom0Y1Statistics",
-            # "Atom1Y0Statistics",
-            # "Atom0Z1Statistics",
-            # "Atom1Z0Statistics",
+            "Atom0X1Statistics",
+            "Atom1X0Statistics",
+            "Atom0Y1Statistics",
+            "Atom1Y0Statistics",
+            "Atom0Z1Statistics",
+            "Atom1Z0Statistics",
             "Atom0DistanceStatistics",
             "Atom1DistanceStatistics",
-            # "Atom0DistanceXStatistics",
-            # "Atom1DistanceXStatistics",
-            # "Atom0DistanceYStatistics",
-            # "Atom1DistanceYStatistics",
-            # "Atom0DistanceZStatistics",
-            # "Atom1DistanceZStatistics",
-            # "TypeX0Statistics",
-            # "TypeX1Statistics",
-            # "TypeY0Statistics",
-            # "TypeY1Statistics",
-            # "TypeZ0Statistics",
-            # "TypeZ1Statistics",
+            "Atom0DistanceXStatistics",
+            "Atom1DistanceXStatistics",
+            "Atom0DistanceYStatistics",
+            "Atom1DistanceYStatistics",
+            "Atom0DistanceZStatistics",
+            "Atom1DistanceZStatistics",
+            "TypeX0Statistics",
+            "TypeX1Statistics",
+            "TypeY0Statistics",
+            "TypeY1Statistics",
+            "TypeZ0Statistics",
+            "TypeZ1Statistics",
             "TypeDistanceStatistics",
-            # "TypeDistanceXStatistics",
-            # "TypeDistanceYStatistics",
-            # "TypeDistanceZStatistics",
+            "TypeDistanceXStatistics",
+            "TypeDistanceYStatistics",
+            "TypeDistanceZStatistics",
             # "FermiContact",
             # "SpinDipolar",
             # "ParaMagneticSpinOrbit",
@@ -103,6 +100,9 @@ class Config:
         # target: "scalar_coupling_constant"
         self.target_name = "fc"
 
+        # whether save X
+        self.save_X = True
+
         # whether excute tuning
         self.tuning = False
 
@@ -110,10 +110,10 @@ class Config:
         self.n_trials = 1
 
         # number of splits for data
-        self.n_splits = 5
+        self.n_splits = 2
 
         # whether save the predicted values
-        self.save = True
+        self.save = False
 
         # study name and storage path of parameters for the best model
         self.study_name = f"lgb_{self.target_name}"
@@ -138,6 +138,24 @@ class Config:
             "min_child_weight": LogUniformParamSpace("min_child_weight", 1e-3, 1e1),
             "min_child_samples": IntParamSpace("min_child_samples", 1, 50),
             "reg_lambda": LogUniformParamSpace("reg_lambda", 1e-1, 1e4),
+        }
+
+        self.lr_params = {
+            "penalty": "l2",
+            "dual": False,
+            "tol": 0.0001,
+            "C": 1.0,
+            "fit_intercept": True,
+            "intercept_scaling": 1,
+            "class_weight": None,
+            "random_state": None,
+            "solver": "warn",
+            "max_iter": 100,
+            "multi_class": "warn",
+            "verbose": 0,
+            "warm_start": False,
+            "n_jobs": None,
+            "l1_ratio": None,
         }
 
         # random seed
